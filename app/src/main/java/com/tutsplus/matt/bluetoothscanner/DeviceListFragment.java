@@ -683,7 +683,11 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
                 new BigInteger(s2.substring(0, 16), 16).longValue(),
                 new BigInteger(s2.substring(16), 16).longValue());
 
-        connectThread.connect(bluetoothDevice, locatorUUID);
+        try {
+            connectThread.connect(bluetoothDevice, locatorUUID);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 //        Toast.makeText(context, "Device connects!", Toast.LENGTH_SHORT).show();
         requestPermissionForUUID();
 //        TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
