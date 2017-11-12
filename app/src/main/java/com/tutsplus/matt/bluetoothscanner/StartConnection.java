@@ -18,6 +18,7 @@ public class StartConnection extends AppCompatActivity {
     public final static int REQUEST_ENABLE_DIS = 300;
 
     private TextView codeDisplay;
+    private String code;
     private IntentFilter filter;
     private BroadcastReceiver broadcastReceiver;
     private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -98,7 +99,7 @@ public class StartConnection extends AppCompatActivity {
         else if(resultCode == REQUEST_ENABLE_DIS){
             Log.d("Working", "Made discoverable");
             Toast.makeText(this, "Made discoverable", Toast.LENGTH_SHORT).show();
-            String code = "";
+            code = "";
             for(int i = 0; i < 8; i++){
                 code = code + (int) (10*Math.random());
             }
