@@ -78,29 +78,29 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
      */
     public DeviceListFragment() {
     }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-        Log.d("DEVICELIST", "Super called for DeviceListFragment onCreate\n");
-        deviceItemList = new ArrayList<DeviceItem>();
-
-        // TODO Scan for devices and add them to the list
-
-        // If there are no devices, add an item that states so. It will be handled in the view.
-        if(deviceItemList.size() == 0) {
-            deviceItemList.add(new DeviceItem("No Devices", "", "false"));
-        }
-
-        Log.d("DEVICELIST", "DeviceList populated\n");
-
-        mAdapter = new DeviceListAdapter(getActivity(), deviceItemList, bTAdapter);
-
-        Log.d("DEVICELIST", "Adapter created\n");
-    }
-
+//
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//
+//
+//        Log.d("DEVICELIST", "Super called for DeviceListFragment onCreate\n");
+//        deviceItemList = new ArrayList<DeviceItem>();
+//
+//        // TODO Scan for devices and add them to the list
+//
+//        // If there are no devices, add an item that states so. It will be handled in the view.
+//        if(deviceItemList.size() == 0) {
+//            deviceItemList.add(new DeviceItem("No Devices", "", "false"));
+//        }
+//
+//        Log.d("DEVICELIST", "DeviceList populated\n");
+//
+//        mAdapter = new DeviceListAdapter(getActivity(), deviceItemList, bTAdapter);
+//
+//        Log.d("DEVICELIST", "Adapter created\n");
+//    }
+    @SuppressWarnings("unchecked")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -126,6 +126,21 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
+        Log.d("DEVICELIST", "Super called for DeviceListFragment onCreate\n");
+        deviceItemList = new ArrayList<DeviceItem>();
+
+        // TODO Scan for devices and add them to the list
+
+        // If there are no devices, add an item that states so. It will be handled in the view.
+        if(deviceItemList.size() == 0) {
+            deviceItemList.add(new DeviceItem("No Devices", "", "false"));
+        }
+
+        Log.d("DEVICELIST", "DeviceList populated\n");
+
+        mAdapter = new DeviceListAdapter(getActivity(), deviceItemList, bTAdapter);
+
+        Log.d("DEVICELIST", "Adapter created\n");
 
         return view;
     }
@@ -152,7 +167,7 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
 
         Log.d("DEVICELIST", "onItemClick position: " + position +
                 " id: " + id + " name: " + deviceItemList.get(position).getDeviceName() + "\n");
-        if (null != mListener) {
+        if (mListener != null) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
             mListener.onFragmentInteraction(deviceItemList.get(position).getDeviceName());
