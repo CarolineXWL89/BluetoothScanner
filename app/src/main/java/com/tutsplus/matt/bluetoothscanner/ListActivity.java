@@ -63,6 +63,13 @@ public class ListActivity extends ActionBarActivity implements DeviceListFragmen
 
         Set<BluetoothDevice> pairedDevices = BTAdapter.getBondedDevices();
 
+        if (pairedDevices.size() > 0) {
+            for (BluetoothDevice device : pairedDevices) {
+                DeviceItem newDevice= new DeviceItem(device.getName(),device.getAddress(),"false");
+                deviceItemList.add(newDevice);
+            }
+        }
+
     }
 
     @Override
