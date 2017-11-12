@@ -2,6 +2,11 @@ package com.tutsplus.matt.bluetoothscanner;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -13,8 +18,10 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 
@@ -28,6 +35,19 @@ import java.util.ArrayList;
  * interface.
  */
 public class DeviceListFragment extends Fragment implements AbsListView.OnItemClickListener{
+
+    private final BroadcastReceiver bReciever = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                // Create a new device item
+                DeviceItem newDevice = new DeviceItem(device.getName(), device.getAddress(), "false");
+                // Add it to our adapter
+                mAdapter.add(newDevice);
+            }
+        }
+    };
 
     private ArrayList <DeviceItem>deviceItemList;
 
@@ -85,6 +105,20 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_deviceitem_list, container, false);
+        ToggleButton scan = (ToggleButton) view.findViewById(R.id.scan);
+        scan.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+                if (isChecked) {
+                    mAdapter.clear();
+                    getActivity().registerReceiver(bReciever, filter);
+                    bTAdapter.startDiscovery();
+                } else {
+                    getActivity().unregisterReceiver(bReciever);
+                    bTAdapter.cancelDiscovery();
+                }
+            }
+        });
 
         // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);
