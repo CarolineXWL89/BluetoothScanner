@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 
-public class ListActivity extends ActionBarActivity implements DeviceListFragment.OnFragmentInteractionListener  {
+public class MainBluetoothEnabler extends ActionBarActivity implements DeviceListFragment.OnFragmentInteractionListener  {
 
 
     private DeviceListFragment mDeviceListFragment;
