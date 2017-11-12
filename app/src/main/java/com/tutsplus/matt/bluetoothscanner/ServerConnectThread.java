@@ -20,7 +20,7 @@ public class ServerConnectThread extends Thread {
     public void acceptConnect(BluetoothAdapter bTAdapter, UUID mUUID) {
         BluetoothServerSocket temp = null;
         try {
-            temp = bTAdapter.listenUsingRfcommWithServiceRecord("Service_Name", mUUID);
+             temp = bTAdapter.listenUsingRfcommWithServiceRecord("Service_Name", mUUID);
         } catch(IOException e) {
             Log.d("SERVERCONNECT", "Could not get a BluetoothServerSocket:" + e.toString());
         }

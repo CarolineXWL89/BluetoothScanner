@@ -678,8 +678,12 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
                 new BigInteger(s2.substring(16), 16).longValue());
 
         connectThread.connect(bluetoothDevice, locatorUUID);
-        Toast.makeText(context, "Device connects!", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context, "Device connects!", Toast.LENGTH_SHORT).show();
         requestPermissionForUUID();
+//        TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+//        acceptorUUID = UUID.fromString(telephonyManager.getDeviceId());
+        String str = "1234";
+        acceptorUUID = UUID.nameUUIDFromBytes(str.getBytes());
         serverConnectThread.acceptConnect(bTAdapter, acceptorUUID);
         Toast.makeText(context, "Device allows connections!", Toast.LENGTH_SHORT).show();
 
@@ -693,17 +697,21 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
 
     public void requestPermissionForUUID(){
         Intent enableUUIDIntent = new Intent(Manifest.permission.READ_PHONE_STATE);
-        startActivityForResult(enableUUIDIntent, 1);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 1){
-            TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-            acceptorUUID = UUID.fromString(telephonyManager.getDeviceId());
+        try {
+            startActivityForResult(enableUUIDIntent, 1);
+        } catch (android.content.ActivityNotFoundException ex) {
+//            Toast.makeText(context, "What the derp.", Toast.LENGTH_SHORT).show();
         }
     }
+
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if(requestCode == 1){
+//            TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+//            acceptorUUID = UUID.fromString(telephonyManager.getDeviceId());
+//        }
+//    }
 
     /**
      * The default content for this Fragment has a TextView that is shown when
