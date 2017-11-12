@@ -18,7 +18,6 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -31,7 +30,6 @@ import android.os.UserHandle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Display;
@@ -76,6 +74,12 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
                 // Add it to our adapter
                 mAdapter.add(newDevice);
             }
+            /*else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
+                if (!deviceItemList.isEmpty()){
+                    DeviceItem device = deviceItemList.remove(0);
+                    boolean result = device.fetchUuidWithSdp();
+                }
+            }*/
         }
     };
 
@@ -83,7 +87,8 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
 
     private OnFragmentInteractionListener mListener;
     private static BluetoothAdapter bTAdapter;
-    private UUID uuid;
+    private UUID acceptorUUID;
+    private UUID locatorUUID;
     private Context context = new Context() {
         @Override
         public AssetManager getAssets() {
@@ -448,17 +453,17 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
 
         @Override
         public int checkPermission(@NonNull String s, int i, int i1) {
-            return 0;
+            return PackageManager.PERMISSION_GRANTED;
         }
 
         @Override
         public int checkCallingPermission(@NonNull String s) {
-            return 0;
+            return PackageManager.PERMISSION_GRANTED;
         }
 
         @Override
         public int checkCallingOrSelfPermission(@NonNull String s) {
-            return 0;
+            return PackageManager.PERMISSION_GRANTED;
         }
 
         @Override
@@ -488,22 +493,22 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
 
         @Override
         public int checkUriPermission(Uri uri, int i, int i1, int i2) {
-            return 0;
+            return PackageManager.PERMISSION_GRANTED;
         }
 
         @Override
         public int checkCallingUriPermission(Uri uri, int i) {
-            return 0;
+            return PackageManager.PERMISSION_GRANTED;
         }
 
         @Override
         public int checkCallingOrSelfUriPermission(Uri uri, int i) {
-            return 0;
+            return PackageManager.PERMISSION_GRANTED;
         }
 
         @Override
         public int checkUriPermission(@Nullable Uri uri, @Nullable String s, @Nullable String s1, int i, int i1, int i2) {
-            return 0;
+            return PackageManager.PERMISSION_GRANTED;
         }
 
         @Override
@@ -662,11 +667,14 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
          */
         ServerConnectThread serverConnectThread = new ServerConnectThread();
         ConnectThread connectThread = new ConnectThread();
+        String UUID = BluetoothDevice.ACTION_UUID;
+        locatorUUID = 
 
+        connectThread.connect(bTAdapter, (UUID) UUID);
         requestPermissionForUUID();
 
 
-        serverConnectThread.acceptConnect(bTAdapter, (UUID) uuid);
+        serverConnectThread.acceptConnect(bTAdapter, (UUID) acceptorUUID);
 
         if (mListener != null) {
             // Notify the active callbacks interface (the activity, if the
@@ -686,7 +694,7 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 1){
             TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-            uuid = UUID.fromString(telephonyManager.getDeviceId());
+            acceptorUUID = UUID.fromString(telephonyManager.getDeviceId());
         }
     }
 

@@ -63,7 +63,7 @@ public class MainBluetoothEnabler extends ActionBarActivity implements DeviceLis
 
         if (pairedDevices.size() > 0) {
             for (BluetoothDevice device : pairedDevices) {
-                DeviceItem newDevice= new DeviceItem(device.getName(),device.getAddress(),"false");
+                DeviceItem newDevice= new DeviceItem(device.getName(),device.getAddress(),"false", device);
                 deviceItemList.add(newDevice);
             }
         }

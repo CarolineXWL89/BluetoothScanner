@@ -1,5 +1,7 @@
 package com.tutsplus.matt.bluetoothscanner;
 
+import android.bluetooth.BluetoothDevice;
+
 /**
  * Created by Matt on 5/12/2015.
  */
@@ -8,6 +10,16 @@ public class DeviceItem {
     private String deviceName;
     private String address;
     private boolean connected;
+
+    public boolean isConnected() {
+        return connected;
+    }
+
+    public BluetoothDevice getBluetoothDevice() {
+        return bluetoothDevice;
+    }
+
+    private BluetoothDevice bluetoothDevice;
 
     public String getDeviceName() {
         return deviceName;
@@ -25,7 +37,7 @@ public class DeviceItem {
         this.deviceName = deviceName;
     }
 
-    public DeviceItem(String name, String address, String connected){
+    public DeviceItem(String name, String address, String connected, BluetoothDevice bluetoothDevice){
         this.deviceName = name;
         this.address = address;
         if (connected == "true") {
@@ -34,5 +46,6 @@ public class DeviceItem {
         else {
             this.connected = false;
         }
+        this.bluetoothDevice = bluetoothDevice;
     }
 }
