@@ -42,6 +42,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.io.File;
@@ -70,7 +71,7 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 // Create a new device item
-                DeviceItem newDevice = new DeviceItem(device.getName(), device.getAddress(), "false");
+                DeviceItem newDevice = new DeviceItem(device.getName(), device.getAddress(), "false", device);
                 // Add it to our adapter
                 mAdapter.add(newDevice);
             }
@@ -606,7 +607,7 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
 
         // If there are no devices, add an item that states so. It will be handled in the view.
         if(deviceItemList.size() == 0) {
-            deviceItemList.add(new DeviceItem("No Devices", "", "false"));
+            deviceItemList.add(new DeviceItem("No Devices", "", "false", null));
         }
 
         Log.d("DEVICELIST", "DeviceList populated\n");
@@ -665,16 +666,17 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
         /*instantiate the ServerConnectThread and ConnectThread
         CT.connect(
          */
+        BluetoothDevice bluetoothDevice = deviceItemList.get(position).getBluetoothDevice();
         ServerConnectThread serverConnectThread = new ServerConnectThread();
         ConnectThread connectThread = new ConnectThread();
-        String UUID = BluetoothDevice.ACTION_UUID;
-        locatorUUID = 
+        //String UUID = BluetoothDevice.ACTION_UUID;
+        locatorUUID = java.util.UUID.fromString(bluetoothDevice.ACTION_UUID);
 
-        connectThread.connect(bTAdapter, (UUID) UUID);
+        connectThread.connect(bluetoothDevice, locatorUUID);
+        Toast.makeText(context, "Device connects!", Toast.LENGTH_SHORT).show();
         requestPermissionForUUID();
-
-
-        serverConnectThread.acceptConnect(bTAdapter, (UUID) acceptorUUID);
+        serverConnectThread.acceptConnect(bTAdapter, acceptorUUID);
+        Toast.makeText(context, "Device allows connections!", Toast.LENGTH_SHORT).show();
 
         if (mListener != null) {
             // Notify the active callbacks interface (the activity, if the
