@@ -51,6 +51,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -670,7 +671,11 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
         ServerConnectThread serverConnectThread = new ServerConnectThread();
         ConnectThread connectThread = new ConnectThread();
         //String UUID = BluetoothDevice.ACTION_UUID;
-        locatorUUID = java.util.UUID.fromString(bluetoothDevice.ACTION_UUID);
+        String s = "0f14d0ab-9605-4a62-a9e4-5ed26688389b";
+        String s2 = s.replace("-", "");
+        locatorUUID = new UUID(
+                new BigInteger(s2.substring(0, 16), 16).longValue(),
+                new BigInteger(s2.substring(16), 16).longValue());
 
         connectThread.connect(bluetoothDevice, locatorUUID);
         Toast.makeText(context, "Device connects!", Toast.LENGTH_SHORT).show();

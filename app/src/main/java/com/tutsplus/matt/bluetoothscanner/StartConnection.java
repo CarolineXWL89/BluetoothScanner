@@ -15,7 +15,7 @@ import android.widget.Toast;
 public class StartConnection extends AppCompatActivity {
 
     public final static int REQUEST_ENABLE_BT = 1;
-    public final static int REQUEST_ENABLE_DIS = 300;
+    public final static int REQUEST_ENABLE_DIS = 20;
 
     private TextView codeDisplay;
     private String code;
