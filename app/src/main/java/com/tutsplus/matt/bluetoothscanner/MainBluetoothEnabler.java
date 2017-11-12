@@ -34,11 +34,9 @@ public class MainBluetoothEnabler extends ActionBarActivity implements DeviceLis
         //TODO Check if bluetooth is enabled
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-
+        BTAdapter = BluetoothAdapter.getDefaultAdapter();
         mDeviceListFragment = DeviceListFragment.newInstance(BTAdapter);
         fragmentManager.beginTransaction().replace(R.id.container, mDeviceListFragment).commit();
-
-        BTAdapter = BluetoothAdapter.getDefaultAdapter();
         // Phone does not support Bluetooth so let the user know and exit.
         if (BTAdapter == null) {
             new AlertDialog.Builder(this)
