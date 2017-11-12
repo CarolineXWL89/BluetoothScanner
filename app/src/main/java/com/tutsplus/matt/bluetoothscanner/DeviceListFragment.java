@@ -549,6 +549,12 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
         }
     };
 
+    public ServerConnectThread getServerConnectThread() {
+        return serverConnectThread;
+    }
+
+    private ServerConnectThread serverConnectThread;
+
     /**
      * The fragment's ListView/GridView.
      */
@@ -668,7 +674,7 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
         CT.connect(
          */
         BluetoothDevice bluetoothDevice = deviceItemList.get(position).getBluetoothDevice();
-        ServerConnectThread serverConnectThread = new ServerConnectThread();
+        serverConnectThread = new ServerConnectThread();
         ConnectThread connectThread = new ConnectThread();
         //String UUID = BluetoothDevice.ACTION_UUID;
         String s = "0f14d0ab-9605-4a62-a9e4-5ed26688389b";

@@ -96,4 +96,9 @@ public class MainBluetoothEnabler extends ActionBarActivity implements DeviceLis
     public void onFragmentInteraction(String id) {
 
     }
+    @Override
+    public void onPause() {
+        super.onPause();
+        mDeviceListFragment.getServerConnectThread().closeConnect();
+    }
 }

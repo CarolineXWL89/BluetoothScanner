@@ -42,6 +42,7 @@ public class ServerConnectThread extends Thread {
         }
     }
 
+
     public void closeConnect() {
         try {
             bTSocket.close();
