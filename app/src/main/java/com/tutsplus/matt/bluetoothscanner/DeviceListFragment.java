@@ -106,13 +106,6 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
                              Bundle savedInstanceState) {
 
         // Set the adapter
-        View view = inflater.inflate(R.layout.fragment_deviceitem_list, container, false);
-
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
-
-        // Set OnItemClickListener so we can be notified on item clicks
-        mListView.setOnItemClickListener(this);
         Log.d("DEVICELIST", "Super called for DeviceListFragment onCreate\n");
         deviceItemList = new ArrayList<DeviceItem>();
 
@@ -128,6 +121,13 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
         mAdapter = new DeviceListAdapter(getActivity(), deviceItemList, bTAdapter);
 
         Log.d("DEVICELIST", "Adapter created\n");
+        View view = inflater.inflate(R.layout.fragment_deviceitem_list, container, false);
+
+        mListView = (AbsListView) view.findViewById(android.R.id.list);
+        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+
+        // Set OnItemClickListener so we can be notified on item clicks
+        mListView.setOnItemClickListener(this);
         ToggleButton scan = (ToggleButton) view.findViewById(R.id.scan);
         scan.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -150,6 +150,7 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
         super.onAttach(activity);
         try {
             mListener = (OnFragmentInteractionListener) activity;
+            Log.d("Working", "attached");
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -160,6 +161,7 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        Log.d("Working", "detached");
     }
 
     @Override
