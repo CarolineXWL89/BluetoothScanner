@@ -104,23 +104,10 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_deviceitem_list, container, false);
-        ToggleButton scan = (ToggleButton) view.findViewById(R.id.scan);
-        scan.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-                if (isChecked) {
-                    mAdapter.clear();
-                    getActivity().registerReceiver(bReciever, filter);
-                    bTAdapter.startDiscovery();
-                } else {
-                    getActivity().unregisterReceiver(bReciever);
-                    bTAdapter.cancelDiscovery();
-                }
-            }
-        });
 
         // Set the adapter
+        View view = inflater.inflate(R.layout.fragment_deviceitem_list, container, false);
+
         mListView = (AbsListView) view.findViewById(android.R.id.list);
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
 
@@ -141,7 +128,20 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
         mAdapter = new DeviceListAdapter(getActivity(), deviceItemList, bTAdapter);
 
         Log.d("DEVICELIST", "Adapter created\n");
-
+        ToggleButton scan = (ToggleButton) view.findViewById(R.id.scan);
+        scan.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+                if (isChecked) {
+                    mAdapter.clear();
+                    getActivity().registerReceiver(bReciever, filter);
+                    bTAdapter.startDiscovery();
+                } else {
+                    getActivity().unregisterReceiver(bReciever);
+                    bTAdapter.cancelDiscovery();
+                }
+            }
+        });
         return view;
     }
 
