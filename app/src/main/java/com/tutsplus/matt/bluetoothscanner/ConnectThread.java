@@ -5,16 +5,20 @@ import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
 import java.io.IOException;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.UUID;
 
 /**
  * Created by princ on 12/11/2017.
  */
 
-public class ConnectThread extends Thread {
+public class ConnectThread extends Thread{
     private BluetoothSocket bTSocket;
 
-    public boolean connect(BluetoothDevice bTDevice, UUID mUUID) {
+    public boolean connect(BluetoothDevice bTDevice, UUID mUUID) throws IOException {
+
+
         try {
             bTSocket = bTDevice.createRfcommSocketToServiceRecord(mUUID);
         } catch (IOException e) {

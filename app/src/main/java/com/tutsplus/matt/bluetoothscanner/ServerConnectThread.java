@@ -14,11 +14,11 @@ import java.util.UUID;
 
 public class ServerConnectThread extends Thread {
     private BluetoothSocket bTSocket;
+    private BluetoothServerSocket temp = null;
 
     public ServerConnectThread() { }
 
     public void acceptConnect(BluetoothAdapter bTAdapter, UUID mUUID) {
-        BluetoothServerSocket temp = null;
         try {
              temp = bTAdapter.listenUsingRfcommWithServiceRecord("Service_Name", mUUID);
         } catch(IOException e) {
