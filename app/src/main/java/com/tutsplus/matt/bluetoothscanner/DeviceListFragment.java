@@ -152,7 +152,7 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
 
         Log.d("DEVICELIST", "onItemClick position: " + position +
                 " id: " + id + " name: " + deviceItemList.get(position).getDeviceName() + "\n");
-        if (null != mListener) {
+        if (mListener != null) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
             mListener.onFragmentInteraction(deviceItemList.get(position).getDeviceName());
