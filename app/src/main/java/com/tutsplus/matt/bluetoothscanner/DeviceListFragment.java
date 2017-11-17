@@ -751,4 +751,9 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
         public void onFragmentInteraction(String id);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().unregisterReceiver(bReciever);
+    }
 }
