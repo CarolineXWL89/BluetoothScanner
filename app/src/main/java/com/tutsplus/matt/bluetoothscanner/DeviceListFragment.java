@@ -23,6 +23,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -30,7 +31,6 @@ import android.os.UserHandle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -54,6 +54,7 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 /**
  * A fragment representing a list of Items.
@@ -667,41 +668,47 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-        Log.d("DEVICELIST", "onItemClick position: " + position +
-                " id: " + id + " name: " + deviceItemList.get(position).getDeviceName() + "\n");
-        /*instantiate the ServerConnectThread and ConnectThread
-        CT.connect(
-         */
-        BluetoothDevice bluetoothDevice = deviceItemList.get(position).getBluetoothDevice();
-        serverConnectThread = new ServerConnectThread();
-        ConnectThread connectThread = new ConnectThread();
-        //String UUID = BluetoothDevice.ACTION_UUID;
-        String s = "0f14d0ab-9605-4a62-a9e4-5ed26688389b";
-        String s2 = s.replace("-", "");
-        locatorUUID = new UUID(
-                new BigInteger(s2.substring(0, 16), 16).longValue(),
-                new BigInteger(s2.substring(16), 16).longValue());
-
         try {
-            connectThread.connect(bluetoothDevice, locatorUUID);
-        } catch (IOException e) {
+            new GiveMeDuck().execute(new MyDuckIsMine(parent, view, position, id)).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
             e.printStackTrace();
         }
-//        Toast.makeText(context, "Device connects!", Toast.LENGTH_SHORT).show();
-        requestPermissionForUUID();
-//        TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-//        acceptorUUID = UUID.fromString(telephonyManager.getDeviceId());
-        String str = "1234";
-        acceptorUUID = UUID.nameUUIDFromBytes(str.getBytes());
-        serverConnectThread.acceptConnect(bTAdapter, acceptorUUID);
-        Toast.makeText(context, "Device allows connections!", Toast.LENGTH_SHORT).show();
-
-        if (mListener != null) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(deviceItemList.get(position).getDeviceName());
-        }
+//        Log.d("DEVICELIST", "onItemClick position: " + position +
+//                " id: " + id + " name: " + deviceItemList.get(position).getDeviceName() + "\n");
+//        /*instantiate the ServerConnectThread and ConnectThread
+//        CT.connect(
+//         */
+//        BluetoothDevice bluetoothDevice = deviceItemList.get(position).getBluetoothDevice();
+//        serverConnectThread = new ServerConnectThread();
+//        ConnectThread connectThread = new ConnectThread();
+//        //String UUID = BluetoothDevice.ACTION_UUID;
+//        String s = "0f14d0ab-9605-4a62-a9e4-5ed26688389b";
+//        String s2 = s.replace("-", "");
+//        locatorUUID = new UUID(
+//                new BigInteger(s2.substring(0, 16), 16).longValue(),
+//                new BigInteger(s2.substring(16), 16).longValue());
+//
+//        try {
+//            connectThread.connect(bluetoothDevice, locatorUUID);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+////        Toast.makeText(context, "Device connects!", Toast.LENGTH_SHORT).show();
+//        requestPermissionForUUID();
+////        TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+////        acceptorUUID = UUID.fromString(telephonyManager.getDeviceId());
+//        String str = "1234";
+//        acceptorUUID = UUID.nameUUIDFromBytes(str.getBytes());
+//        serverConnectThread.acceptConnect(bTAdapter, acceptorUUID);
+//        Toast.makeText(context, "Device allows connections!", Toast.LENGTH_SHORT).show();
+//
+//        if (mListener != null) {
+//            // Notify the active callbacks interface (the activity, if the
+//            // fragment is attached to one) that an item has been selected.
+//            mListener.onFragmentInteraction(deviceItemList.get(position).getDeviceName());
+//        }
 
     }
 
@@ -755,5 +762,54 @@ public class DeviceListFragment extends Fragment implements AbsListView.OnItemCl
     public void onDestroy() {
         super.onDestroy();
         getActivity().unregisterReceiver(bReciever);
+    }
+
+    public class GiveMeDuck extends AsyncTask<MyDuckIsMine, Void, Void>{
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
+
+        @Override
+        protected Void doInBackground(MyDuckIsMine... myDuckIsMines) {
+            AdapterView<?> parent = myDuckIsMines[0].getParent();
+            int position = myDuckIsMines[0].getPosition();
+            long id = myDuckIsMines[0].getId();
+            Log.d("DEVICELIST", "onItemClick position: " + position +
+                    " id: " + id + " name: " + deviceItemList.get(position).getDeviceName() + "\n");
+        /*instantiate the ServerConnectThread and ConnectThread
+        CT.connect(
+         */
+            BluetoothDevice bluetoothDevice = deviceItemList.get(position).getBluetoothDevice();
+            serverConnectThread = new ServerConnectThread();
+            ConnectThread connectThread = new ConnectThread();
+            //String UUID = BluetoothDevice.ACTION_UUID;
+            String s = "0f14d0ab-9605-4a62-a9e4-5ed26688389b";
+            String s2 = s.replace("-", "");
+            locatorUUID = new UUID(
+                    new BigInteger(s2.substring(0, 16), 16).longValue(),
+                    new BigInteger(s2.substring(16), 16).longValue());
+
+            try {
+                connectThread.connect(bluetoothDevice, locatorUUID);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+//        Toast.makeText(context, "Device connects!", Toast.LENGTH_SHORT).show();
+            requestPermissionForUUID();
+//        TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+//        acceptorUUID = UUID.fromString(telephonyManager.getDeviceId());
+            String str = "1234";
+            acceptorUUID = UUID.nameUUIDFromBytes(str.getBytes());
+            serverConnectThread.acceptConnect(bTAdapter, acceptorUUID);
+            Toast.makeText(context, "Device allows connections!", Toast.LENGTH_SHORT).show();
+
+            if (mListener != null) {
+                // Notify the active callbacks interface (the activity, if the
+                // fragment is attached to one) that an item has been selected.
+                mListener.onFragmentInteraction(deviceItemList.get(position).getDeviceName());
+            }
+            return null;
+        }
     }
 }
