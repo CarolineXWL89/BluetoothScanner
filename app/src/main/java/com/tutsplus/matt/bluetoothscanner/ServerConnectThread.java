@@ -26,7 +26,7 @@ public class ServerConnectThread extends Thread {
         }
         while(true) {
             try {
-                bTSocket = temp.accept();
+                bTSocket = temp.accept(10000);
             } catch (IOException e) {
                 Log.d("SERVERCONNECT", "Could not accept an incoming connection.");
                 break;

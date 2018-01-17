@@ -58,8 +58,7 @@ public class StartConnection extends AppCompatActivity {
     }
 
     public void onStartClick(View view){
-        setUpBT();
-        if(!(mBluetoothAdapter.getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE )) {
+        if(!(mBluetoothAdapter.getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE ) && setUpBT()) {
             Intent discoverableIntent =
                     new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
             discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, REQUEST_ENABLE_DIS);
@@ -73,19 +72,22 @@ public class StartConnection extends AppCompatActivity {
         startActivity(intent);
     }
 
-    protected void setUpBT(){
-        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    protected boolean setUpBT(){
+//        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
             // Device does not support Bluetooth
             Toast.makeText(this, "This device does not support Bluetooth", Toast.LENGTH_SHORT).show();
+            return false;
         }
         else if (!mBluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             Toast.makeText(this, "Please enable Bluetooth NOW!!!!!", Toast.LENGTH_SHORT).show();
+            return false;
         }
         else{
             Toast.makeText(this, "Yay", Toast.LENGTH_SHORT).show();
+            return true;
         }
     }
 
